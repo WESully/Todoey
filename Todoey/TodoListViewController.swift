@@ -13,13 +13,15 @@ class TodoListViewController: UITableViewController {
     //
     //
     
-    let itemArray = ["To Do 1", "To Do 2", "To Do 3"]
+    var itemArray = ["To Do 1", "To Do 2", "To Do 3"]
 
     override func viewDidLoad() {
         //
         //
         //
         
+        print("override func viewDidLoad() ...")
+
         super.viewDidLoad()
         
         // Do any additional setup after loading the view, typically from a nib ...
@@ -32,6 +34,8 @@ class TodoListViewController: UITableViewController {
         //
         //
         
+        print("override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) ...")
+
         return(itemArray.count)
     }
     
@@ -40,6 +44,8 @@ class TodoListViewController: UITableViewController {
         //
         //
         
+        print("override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) ...")
+
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
         
         cell.textLabel?.text = itemArray[indexPath.row]
@@ -54,7 +60,7 @@ class TodoListViewController: UITableViewController {
         //
         //
         
-        print(itemArray[indexPath.row])
+        print("override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) ...")
         
         if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
             tableView.cellForRow(at: indexPath)?.accessoryType = .none
@@ -64,5 +70,37 @@ class TodoListViewController: UITableViewController {
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    @IBAction func addTouchUpInside(_ sender: UIBarButtonItem) {
+        //
+        //
+        //
+        
+        var textField = UITextField()
+        
+        print("@IBAction func addTouchUpInside(_ sender: UIBarButtonItem) ...")
+        
+        let alertController = UIAlertController(title: "Title", message: "", preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "Add Item", style: .default) { (action) in
+
+            print(textField.text as Any)
+            
+            //  Make sure textField is not empty ...
+            // self.itemArray.append(textField.text ?? "N/A")
+            self.itemArray.append(textField.text!)
+
+            self.tableView.reloadData()
+        }
+        
+        alertController.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Item"
+            
+            textField = alertTextField
+        }
+        
+        alertController.addAction(alertAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
 }
